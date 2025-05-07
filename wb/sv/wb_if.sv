@@ -13,7 +13,7 @@ bit [7:0] din;
 bit [7:0] dout; 
 bit ack;
 bit valid_sb; // to till the scoreboard  wither the transaction is dummy or real  
-
+bit rest_rf;
 
 
 task  send_to_dut (wb_transaction tr);
@@ -33,6 +33,7 @@ addr <= 0;
 we <= 0;
 din <= 0;
 valid_sb <=tr.valid_sb;
+rest_rf <=tr.rest_rf;
 end else if (tr.op_type == wb_read)begin
 
 @(negedge clk);
@@ -41,6 +42,7 @@ stb <= 1;
 addr <= tr.addr;
 we <= 0;
 valid_sb <=tr.valid_sb;
+rest_rf <=tr.rest_rf;
 @(posedge clk);
 
 wait(ack);

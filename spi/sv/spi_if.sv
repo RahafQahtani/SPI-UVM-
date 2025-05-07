@@ -88,9 +88,9 @@ interface spi_if(input logic clock, input logic reset, input logic sclk , input 
       smonstart = 1'b1;
     for (int i = 7; i >= 0; i--) begin
     //   #5 
-    received_data[i] = mosi;
+    
        @(posedge sclk); 
-        
+        received_data[i] = mosi;
             miso = response_data[i];  // Send back data to master
           
    
@@ -118,7 +118,7 @@ interface spi_if(input logic clock, input logic reset, input logic sclk , input 
     
     for (int i = 7; i >= 0; i--) begin
         //  #5 
-        // @(posedge sclk);
+        @(posedge sclk);
         data[i] = mosi;
         data1[i] = miso;
     end

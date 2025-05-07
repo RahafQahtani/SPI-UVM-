@@ -35,15 +35,37 @@ class wb_x_spi_module extends uvm_component;
     s.addr = t.addr;
     s.op_type = t.op_type;
     s.valid_sb = t.valid_sb;
+    s.rest_rf=t.rest_rf; 
+
+    if (t.rest_rf==1 )begin 
+      SPCR = 8'h10;  // Control Register
+      SPSR = 8'h05;  // Status Register
+      SPDR = 8'h00;  // Data Register
+      SPER = 8'h00;  // Extensions Register
+      CSREG = 8'h00; // Chip Select Register
+
+    end 
 
     if (t.op_type == wb_write) begin
       s.dout = t.dout;
       s.din  = t.din;
 
       case (t.addr)
-        32'h0: SPCR = t.din;
+        32'h0: begin  
+        
+        SPCR = t.din;
+         if (SPCR[6]==0) begin
+          tx_queue.delete();
+          rx_queue.delete();
+          // SPCR[6]=1;
+          end 
+        end 
         32'h1: SPSR = t.din;
-        32'h2: SPDR = t.din;
+        32'h2: begin 
+                  SPDR = t.din;
+                   tx_queue.push_back(t.din);
+                
+              end
         32'h3: SPER = t.din;
         32'h4: CSREG = t.din;
         default: ;
@@ -53,16 +75,30 @@ class wb_x_spi_module extends uvm_component;
       case (t.addr)
         32'h0: s.dout = SPCR;
         32'h1: s.dout = SPSR;
-        32'h2: s.dout = SPDR;
+        32'h2: begin s.dout = SPDR;
+        SPSR[7] = 1'b0; 
+        end  
         32'h3: s.dout = SPER;
         32'h4: s.dout = CSREG;
         default: s.dout = 8'h00;
       endcase
     end
-
+     
+    update_status_register(); // update SPSR flags
     ref_analysis_port.write(s);
+    
   endfunction
 
+    task update_status_register();
+  // Reserved bits remain 0 (or untouched)
+  SPSR[7] = 1'b1;
+  SPSR[3] = (tx_queue.size() >= 4); // WFFULL
+  if (SPSR[3]) SPSR[6] = 1'b1; //WCOL is stressed if Write fifo full 
+  SPSR[2] = (tx_queue.size() == 0); // WFEMPTY
+  SPSR[1] = (rx_queue.size() >= 4); // RFFULL
+  SPSR[0] = (rx_queue.size() == 0); // RFEMPTY
+  
+endtask 
   // Getter Functions
   function logic [7:0] get_SPCR();
     return SPCR;
@@ -74,6 +110,9 @@ class wb_x_spi_module extends uvm_component;
 
   function logic [7:0] get_SPER();
     return SPER;
+  endfunction
+  function logic [7:0] get_SPDR();
+    return SPDR;
   endfunction
 
   function logic [7:0] get_CSREG();

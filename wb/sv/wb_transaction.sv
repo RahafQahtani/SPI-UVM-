@@ -16,6 +16,7 @@ static int data_width=8;
   rand logic [ADDR_WIDTH-1:0] addr;
   rand logic [DATA_WIDTH-1:0] din;
   logic [DATA_WIDTH-1:0] dout;
+  rand logic rest_rf; 
   rand op_type_enum op_type;
   rand bit  valid_sb;  // to till the scoreboard  wither the transaction is dummy or real  
 
@@ -28,7 +29,7 @@ static int data_width=8;
     `uvm_field_int(addr, UVM_DEFAULT)
     `uvm_field_int(din, UVM_DEFAULT)
     `uvm_field_int(dout, UVM_DEFAULT)
-    `uvm_field_int(valid_sb, UVM_DEFAULT)
+    `uvm_field_int(rest_rf, UVM_DEFAULT)
     `uvm_object_utils_end
 
 

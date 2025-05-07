@@ -465,13 +465,13 @@ top.sv
 /mnt/NVME2/synopsys/vcs/W-2024.09-SP1/linux64/lib/vcsdstub.tab
 126
 which_declare=declare -f
-XDG_SESSION_ID=940
+XDG_SESSION_ID=1098
 XDG_RUNTIME_DIR=/run/user/1042
 XDG_DATA_DIRS=/home/Rahaf_Alqahtani/.local/share/flatpak/exports/share:/var/lib/flatpak/exports/share:/usr/local/share:/usr/share:/var/lib/snapd/desktop
 XA_HOME=/mnt/NVME2/synopsys/xa/W-2024.09-SP1
 VUI_HOME=/mnt/NVME2/synopsys/vui/W-2024.09-SP2
 VTRAN_HOME=/mnt/NVME2/synopsys/vtran/W-2024.09-SP2
-VSCODE_IPC_HOOK_CLI=/run/user/1042/vscode-ipc-bd4f6cc6-7dd6-41bd-977c-14acbba92b92.sock
+VSCODE_IPC_HOOK_CLI=/run/user/1042/vscode-ipc-0386601f-1482-4345-b45f-72d15bc98453.sock
 VSCODE_GIT_IPC_HANDLE=/run/user/1042/vscode-git-f8a703172e.sock
 VSCODE_GIT_ASKPASS_NODE=/home/Rahaf_Alqahtani/.vscode-server/cli/servers/Stable-4437686ffebaf200fa4a6e6e67f735f3edf24ada/server/node
 VSCODE_GIT_ASKPASS_MAIN=/home/Rahaf_Alqahtani/.vscode-server/cli/servers/Stable-4437686ffebaf200fa4a6e6e67f735f3edf24ada/server/extensions/git/dist/askpass-main.js
@@ -507,8 +507,8 @@ SYN_HOME=/mnt/NVME2/synopsys/syn
 STARRC_HOME=/mnt/NVME2/synopsys/starrc
 SSL_CERT_FILE=/etc/pki/ca-trust/extracted/pem/tls-ca-bundle.pem
 SSL_CERT_DIR=/etc/pki/tls/certs
-SSH_CONNECTION=192.168.1.37 58244 192.168.1.8 22
-SSH_CLIENT=192.168.1.37 58244 22
+SSH_CONNECTION=192.168.1.37 39176 192.168.1.8 22
+SSH_CLIENT=192.168.1.37 39176 22
 SSH_ASKPASS=/usr/libexec/openssh/gnome-ssh-askpass
 SPYGLASS_HOME=/mnt/NVME2/synopsys/spyglass/W-2024.09-SP1/SPYGLASS_HOME
 SPIKE_PATH=/usr/bin
@@ -593,17 +593,17 @@ ALE_HOME=/mnt/NVME2/synopsys/ale
 0
 0
 202
-1745832198 test_lib.sv
+1746530319 test_lib.sv
 1746086403 testbench.sv
-1746425569 mc_seq_lib.sv
+1746530396 mc_seq_lib.sv
 1745495586 mc_sequencer.sv
 1746085062 ../wb_x_spi_module/sv/spi_module.sv
-1746424824 ../wb_x_spi_module/sv/scoreboard.sv
-1746422044 ../wb_x_spi_module/sv/wb_x_spi_module.sv
+1746530142 ../wb_x_spi_module/sv/scoreboard.sv
+1746532213 ../wb_x_spi_module/sv/wb_x_spi_module.sv
 1745495586 ../spi/sv/../sv/spi_env.sv
 1745495586 ../spi/sv/../sv/spi_slave_agent.sv
-1745495586 ../spi/sv/../sv/spi_slave_driver.sv
-1745495586 ../spi/sv/../sv/spi_slave_seqs.sv
+1746508564 ../spi/sv/../sv/spi_slave_driver.sv
+1746510476 ../spi/sv/../sv/spi_slave_seqs.sv
 1745495586 ../spi/sv/../sv/spi_slave_sequencer.sv
 1745495586 ../spi/sv/../sv/spi_slave_monitor.sv
 1745495586 ../spi/sv/../sv/spi_master_agent.sv
@@ -626,12 +626,12 @@ ALE_HOME=/mnt/NVME2/synopsys/ale
 1745495586 ../wb/sv/../sv/wb_slave_monitor.sv
 1745495586 ../wb/sv/../sv/wb_slave_driver.sv
 1745495586 ../wb/sv/../sv/wb_slave_sequencer.sv
-1746425795 ../wb/sv/../sv/wb_master_seqs.sv
+1746531793 ../wb/sv/../sv/wb_master_seqs.sv
 1745495586 ../wb/sv/../sv/wb_master_agent.sv
-1745495586 ../wb/sv/../sv/wb_master_monitor.sv
+1746532439 ../wb/sv/../sv/wb_master_monitor.sv
 1745495586 ../wb/sv/../sv/wb_master_driver.sv
 1745495586 ../wb/sv/../sv/wb_master_sequencer.sv
-1746075621 ../wb/sv/../sv/wb_transaction.sv
+1746445105 ../wb/sv/../sv/wb_transaction.sv
 1733289098 /mnt/NVME2/synopsys/vcs/W-2024.09-SP1/etc/uvm/vcs/vcs_uvm_alt.sv
 1733289097 /mnt/NVME2/synopsys/vcs/W-2024.09-SP1/etc/uvm/reg/snps_uvm_reg_bank.svh
 1733289097 /mnt/NVME2/synopsys/vcs/W-2024.09-SP1/etc/uvm/reg/sequences/uvm_reg_mem_hdl_paths_seq.svh
@@ -786,11 +786,11 @@ ALE_HOME=/mnt/NVME2/synopsys/ale
 1745495586 ../rtl/uart/raminfr.v
 1745495586 ../rtl/spi/simple_spi_top.v
 1745495586 ../rtl/spi/fifo4.v
-1746086414 ../spi/sv/spi_if.sv
+1746509259 ../spi/sv/spi_if.sv
 1745495586 ../spi/sv/spi_pkg.sv
 1745495586 ../clock_and_reset/sv/clock_and_reset_pkg.sv
 1745495586 ../clock_and_reset/sv/clock_and_reset_if.sv
-1746087111 ../wb/sv/wb_if.sv
+1746445145 ../wb/sv/wb_if.sv
 1745495586 ../wb/sv/wb_pkg.sv
 1733289098 /mnt/NVME2/synopsys/vcs/W-2024.09-SP1/etc/uvm/uvm_pkg.sv
 1733285154 /mnt/NVME2/synopsys/vcs/W-2024.09-SP1/linux64/lib/vcsdstub.tab
@@ -802,5 +802,5 @@ ALE_HOME=/mnt/NVME2/synopsys/ale
 1733286010 /mnt/NVME2/synopsys/vcs/W-2024.09-SP1/linux64/lib/liberrorinf.so
 1733286000 /mnt/NVME2/synopsys/vcs/W-2024.09-SP1/linux64/lib/libsnpsmalloc.so
 1733285992 /mnt/NVME2/synopsys/vcs/W-2024.09-SP1/linux64/lib/libvfs.so
-1746425806 simv.daidir
+1746598389 simv.daidir
 -1 partitionlib

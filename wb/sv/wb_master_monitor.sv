@@ -58,7 +58,7 @@ task collect();
 wait(vif.ack);
 @(negedge vif.clk);
 tr_collect.op_type =  vif.we ? wb_write : wb_read;
-tr_collect.addr = vif.addr[1:0];
+tr_collect.addr = vif.addr[2:0];
 tr_collect.din = vif.din;
 tr_collect.dout = vif.dout;
 tr_collect.valid_sb=vif.valid_sb;

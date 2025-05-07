@@ -33,6 +33,7 @@ class spi_slave_driver extends uvm_driver#(spi_transaction);
     //   seq_item_port.item_done();
     // end
     forever begin
+       wait (!vif.cs); 
       seq_item_port.get_next_item(req);
       if (req == null) begin
                 `uvm_fatal(get_type_name(), "Received NULL transaction from sequencer")

@@ -69,36 +69,36 @@ class enable_spi_core  extends wb_base_seq ;
                  { op_type == wb_write ; // we =1
                    addr == 0; // enable spi by setting the control register 
                    din==8'b01110000;  // 7:disable inta 6:en spi 5:reserved 4:set spi as master 3:S_polarity 2: S_phase  [1:0]: sclk=clk/2
-                   valid_sb==0;// indecate write sequnnace
+                   rest_rf==0;// indecate write sequnnace
 
                    })
 
        
-    `uvm_do_with(req,
-                 { op_type == wb_write ; 
-                   addr == 4;        //manually control CS singal through  register 4
-                   din==8'b0000001;  // [0]:  1 to clear Cs     0 to set cs
-                   valid_sb==0;// indecate write sequnnace
+    // `uvm_do_with(req,
+    //              { op_type == wb_write ; 
+    //                addr == 4;        //manually control CS singal through  register 4
+    //                din==8'b0000001;  // [0]:  1 to clear Cs     0 to set cs
+    //                rest_rf==0;// indecate write sequnnace
 
-                   })
+    //                })
 
     
 
       #160;      //stalling until spi send out the byte serially on mosi   
    
-`uvm_do_with(req, 
-                    { op_type == wb_write ; 
-                      addr == 4; //manually control CS singal through  register 4
-                      din==8'b0000000;  // [0]:  1 to clear Cs     0 to set cs
-                      valid_sb==0;// indecate read sequnnace
-                      })
+// `uvm_do_with(req, 
+//                     { op_type == wb_write ; 
+//                       addr == 4; //manually control CS singal through  register 4
+//                       din==8'b0000000;  // [0]:  1 to clear Cs     0 to set cs
+//                       rest_rf==0;// indecate read sequnnace
+//                       })
 
 
  `uvm_do_with(req,
                  { op_type == wb_read ;
                    addr == 0;
                    din==8'b00110000; 
-                   valid_sb==0;// indecate write sequnnace
+                   rest_rf==0;// indecate write sequnnace
                    } //sending read requist to data reg to empty the garbge from read fifo
                 )
    
@@ -136,7 +136,7 @@ class wb_write_spi1_seq extends wb_base_seq ;
                  { op_type == wb_write ; // we =1
                    addr == 0; // enable spi by setting the control register 
                    din==8'b01110000;  // 7:disable inta 6:en spi 5:reserved 4:set spi as master 3:S_polarity 2: S_phase  [1:0]: sclk=clk/2
-                   valid_sb==0;// indecate write sequnnace
+                   rest_rf==0;// sb
 
                    })
 
@@ -145,25 +145,18 @@ class wb_write_spi1_seq extends wb_base_seq ;
                  { op_type == wb_write ; 
                    addr == 4;        //manually control CS singal through  register 4
                    din==8'b0000001;  // [0]:  1 to clear Cs     0 to set cs
-                   valid_sb==0;// indecate write sequnnace
+                   rest_rf==0;// indecate write sequnnace
 
                    })
 
-      //  `uvm_do_with(req,
-      //            { op_type == wb_write ; 
-      //              addr == 2;        //manually control CS singal through  register 4
-      //              din==8'b0000001;  // [0]:  1 to clear Cs     0 to set cs
-      //              valid_sb==0;// indecate write sequnnace
+       `uvm_do_with(req,
+                 { op_type == wb_write ; 
+                   addr == 2;        //manually control CS singal through  register 4
+                   din==8'b0000101;  // [0]:  1 to clear Cs     0 to set cs
+                   rest_rf==0;// indecate write sequnnace
 
-      //              }) 
-    `uvm_do_with(req,
-                 { op_type == wb_write ; // write a random data to data register 
-                   addr == 4;
-                    din==8'b01110000; 
-                   valid_sb==1;// indecate write sequnnace
-
-                   }
-                )
+                   }) 
+  
    
 
       #160;      //stalling until spi send out the byte serially on mosi   
@@ -172,15 +165,14 @@ class wb_write_spi1_seq extends wb_base_seq ;
                     { op_type == wb_write ; 
                       addr == 4; //manually control CS singal through  register 4
                       din==8'b0000000;  // [0]:  1 to clear Cs     0 to set cs
-                      valid_sb==0;// indecate read sequnnace
+                      rest_rf==0;// indecate read sequnnace
                       })
 
 
  `uvm_do_with(req,
                  { op_type == wb_read ;
-                   addr == 1;
-                   din==8'b00110000; 
-                   valid_sb==0;// indecate write sequnnace
+                   addr == 2;
+                   rest_rf==0;// indecate write sequnnace
                    } //sending read requist to data reg to empty the garbge from read fifo
                 )
    
@@ -215,21 +207,21 @@ class wb_write_spi2_seq extends wb_base_seq;
                  { op_type == wb_write;
                    addr == 16'h10; //SPI_2 control register base
                    din == 8'b01110000; // 7:disable inta 6:en spi 5:reserved 4:set spi as master 3:S_polarity 2: S_phase  [1:0]: sclk=clk/2
-                   valid_sb == 0; //indecate write sequnnace
+                   rest_rf == 0; //indecate write sequnnace
                  })
 
     `uvm_do_with(req,
                  { op_type == wb_write;
                    addr == 16'h14; //SPI_2 CS control register
                    din == 8'b00000001; // [0]:  1 to clear Cs     0 to set cs
-                   valid_sb == 0; //indecate write sequnnace
+                   rest_rf == 0; //indecate write sequnnace
                  })
 
     `uvm_do_with(req,
                  { op_type == wb_write;
                    addr == 16'h12; //SPI_2 data register
                    din == 8'b00011111; //dummy data 
-                   valid_sb == 1; //indecate write sequnnace
+                   rest_rf == 1; //indecate write sequnnace
                  })
 
     #160;
@@ -239,13 +231,13 @@ class wb_write_spi2_seq extends wb_base_seq;
                  { op_type == wb_write;
                    addr == 16'h14; //SPI_2 CS control register
                    din == 8'b00000000; // [0]:  1 to clear Cs     0 to set cs
-                   valid_sb == 0; //indecate write sequnnace
+                   rest_rf == 0; //indecate write sequnnace
                  })
 
     `uvm_do_with(req,
                  { op_type == wb_read;
                    addr == 16'h12; 
-                   valid_sb == 0; //indecate write sequnnace
+                   rest_rf == 0; //indecate write sequnnace
                  })
 
   endtask : body
@@ -256,70 +248,173 @@ endclass : wb_write_spi2_seq
 
 
 //------------------------------------------------------------------------------
-// SEQUENCE: wb_read_spi1_seq -  sendying  a dumy write then  send read byte read from spi1 peripheral (addr 3)
+// SEQUENCE: wb_read_spi1_seq -Data Register (SPDR) - Receive Data and Read from FIFO
 //------------------------------------------------------------------------------
 class wb_read_spi1_seq extends wb_base_seq;
 
-      function new(string name = get_type_name());
-        super.new(name);
-      endfunction
+  function new(string name = get_type_name());
+    super.new(name);
+  endfunction
 
-      `uvm_object_utils(wb_read_spi1_seq)
+  `uvm_object_utils(wb_read_spi1_seq)
 
-      virtual task body();
-        `uvm_info(get_type_name(), "Executing sequence", UVM_LOW)
-
-        `uvm_do_with(req,
-                    { op_type == wb_write ; // we =1
-                      addr == 0; // enable spi by setting the control register 
-                      din==8'b01110000;  // 7:disable inta 6:en spi 5:reserved 4:set spi as master 3:S_polarity 2: S_phase  [1:0]: sclk=clk/2
-                     valid_sb==0;// indecate read sequnnace
-                      })
+  virtual task body();
+    `uvm_info(get_type_name(), "Executing sequence", UVM_LOW)
 
 
+    // Step 1: Enable SPI via SPCR (addr 0)
+    `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 0; // SPCR
+        din     == 8'b01110000;  // Enable SPI, master mode, clk = sys/2
+        rest_rf== 0;
+      })
 
-        `uvm_do_with(req,
-                    { op_type == wb_write ; 
-                      addr == 4;        //manually control CS singal through  register 4
-                      din==8'b0000001;  // [0]:  1 to clear Cs     0 to set cs
-                      valid_sb==0;// indecate read sequnnace
-                      })
+    // Step 2: Drive CS high (clear)
+    `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 4; // CSREG
+        din     == 8'b00000001;
+        rest_rf== 0;
+      })
 
+    // Step 3: Dummy write to SPDR to initiate SPI transfer
+    `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 2; // SPDR
+        din     == 8'h00;
+        rest_rf== 0;
+      })
 
+    // Step 4: Wait for transfer to complete (adjust as needed)
+    #160;
 
-            `uvm_do_with(req,
-                    { op_type == wb_write ; // damy write to data register 
-                      addr == 2;
-                      din==8'b000000;
-                      valid_sb==0;// indecate read sequnnace
-                      })
+    // Step 5: Pull CS low
+    `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 4; // CSREG
+        din     == 8'b00000000;
+        rest_rf== 0;
+      })
 
-        #160;  //stalling until spi send out the byte serially on mosi   
+    // Step 6: Read SPDR to get received byte
+    `uvm_do_with(req,
+      { op_type == wb_read;
+        addr    == 2; // SPDR
+        rest_rf== 1;
+      })
 
-        `uvm_do_with(req, 
-                    { op_type == wb_write ; 
-                      addr == 4; //manually control CS singal through  register 4
-                      din==8'b0000000;  // [0]:  1 to clear Cs     0 to set cs
-                      valid_sb==0;// indecate read sequnnace
-                      })
-
-
-
-
-        `uvm_do_with(req,
-                    { op_type == wb_read ;
-                      addr == 2;
-                      din==8'b00000111;
-                      valid_sb==1;// indecate read sequnnace
-                      } //read requist to collect the data from spi read fifo
-    )
-
+    // Optionally: Read SPSR to check RFEMPTY bit (bit 0)
+    `uvm_do_with(req,
+      { op_type == wb_read;
+        addr    == 1; // SPSR
+        rest_rf== 0;
+      })
 
   endtask : body
 
-
 endclass : wb_read_spi1_seq
 
+
+//------------------------------------------------------------------------------
+// SEQUENCE: wb_flags_spi1_seq -Status Register (SPSR) - FIFO Flags and Write Collision
+//------------------------------------------------------------------------------
+class wb_flags_spi1_seq extends wb_base_seq;
+
+  function new(string name = get_type_name());
+    super.new(name);
+  endfunction
+
+  `uvm_object_utils(wb_flags_spi1_seq)
+
+  virtual task body();
+    `uvm_info(get_type_name(), "Executing sequence", UVM_LOW)
+
+
+    // Step 1: Enable SPI via SPCR (addr 0)
+    `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 0; // SPCR
+        din     == 8'b01110000;  // Enable SPI, master mode, clk = sys/2
+        rest_rf== 0;
+      })
+
+    // Step 2: Drive CS high (clear)
+    `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 4; // CSREG
+        din     == 8'b00000001;
+        rest_rf== 0;
+      })
+
+    // Step 3: Dummy write to SPDR to initiate SPI transfer
+    `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 2; // SPDR
+        din     == 8'h00;
+        rest_rf== 0;
+      })
+
+    `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 2; // SPDR
+        din     == 8'h01;
+        rest_rf== 0;
+      })
+      `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 2; // SPDR
+        din     == 8'h02;
+        rest_rf== 0;
+      })
+      `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 2; // SPDR
+        din     == 8'h03;
+        rest_rf== 0;
+      })
+      `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 2; // SPDR
+        din     == 8'h04;
+        rest_rf== 0;
+      })
+    // Step 4: Wait for transfer to complete (adjust as needed)
+    #160;
+
+    // Step 5: Pull CS low
+    `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 4; // CSREG
+        din     == 8'b00000000;
+        rest_rf== 0;
+      })
+
+   
+
+    // Step 5: Read SPSR to check flags 
+    `uvm_do_with(req,
+      { op_type == wb_read;
+        addr    == 1; // SPSR
+        rest_rf== 0;
+      })
+      // Step 6: Enable SPE via SPCR (addr 0) to clear fifo 
+    `uvm_do_with(req,
+      { op_type == wb_write;
+        addr    == 0; // SPCR
+        din     == 8'b00110000;  // Enable SPI, master mode, clk = sys/2
+        rest_rf== 0;
+      })
+
+     // Step 7: Read SPSR to check flags again
+    `uvm_do_with(req,
+      { op_type == wb_read;
+        addr    == 1; // SPSR
+        rest_rf== 0;
+      })
+  endtask : body
+
+endclass : wb_flags_spi1_seq
 
 
 //------------------------------------------------------------------------------
@@ -342,7 +437,7 @@ class wb_read_spi2_seq extends wb_base_seq;
                  { op_type == wb_write ; 
                    addr == 16; //SPI_2 control register
                    din == 8'b01110000;  //7:disable inta 6:en spi 5:reserved 4:set spi as master 3:S_polarity 2: S_phase  [1:0]: sclk=clk/2
-                   valid_sb == 0;  //indicate that it's a read sequence
+                   rest_rf == 0;  //indicate that it's a read sequence
                  })
 
     //control CS signal
@@ -350,7 +445,7 @@ class wb_read_spi2_seq extends wb_base_seq;
                  { op_type == wb_write ; 
                    addr == 20;  //SPI_2 Chip Select register
                    din == 8'b0000001;  //[0]:  1 to clear Cs     0 to set cs
-                   valid_sb == 0; //indicate read sequence
+                   rest_rf == 0; //indicate read sequence
                  })
 
     //to clear FIFO
@@ -358,7 +453,7 @@ class wb_read_spi2_seq extends wb_base_seq;
                  { op_type == wb_write ; 
                    addr == 18; //SPI_2 data register
                    din == 8'b000000;
-                   valid_sb == 0; //indicate read sequence
+                   rest_rf == 0; //indicate read sequence
                  })
 
     #160; 
@@ -368,14 +463,14 @@ class wb_read_spi2_seq extends wb_base_seq;
                  { op_type == wb_write ; 
                    addr == 20;  //SPI_2 Chip Select register
                    din == 8'b0000000;  // [0]:  1 to clear Cs     0 to set cs
-                   valid_sb == 0;  //indicate read sequence
+                   rest_rf == 0;  //indicate read sequence
                  })
 
     //read data from SPI_2 data register
     `uvm_do_with(req,
                  { op_type == wb_read ;
                    addr == 18;  // SPI_2 data register
-                   valid_sb == 1; //indicate read sequence
+                   rest_rf == 1; //indicate read sequence
                  })
   endtask : body
 

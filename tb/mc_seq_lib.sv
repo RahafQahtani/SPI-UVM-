@@ -46,10 +46,10 @@ endclass: mc_seq
 
 class en_spi_seq extends mc_seq;
     
-    `uvm_object_utils(write_seq)
+    `uvm_object_utils(en_spi_seq)
  
 
-    function new(string name ="write_seq");
+    function new(string name ="en_spi_seq");
         super.new(name);
     endfunction:new
 
@@ -130,6 +130,31 @@ endtask:body
 
 
 endclass: read_seq
+
+class flag_seq extends mc_seq;
+    
+    `uvm_object_utils(flag_seq)
+ 
+
+    function new(string name ="flag_seq");
+        super.new(name);
+    endfunction:new
+
+//declare the sequences you want to use
+wb_flags_spi1_seq wb_spi1_flag;
+spi_slave_response_seq spi_seq;
+
+virtual task body;
+`uvm_info(get_type_name(), "body of mc_sequence 🧑🏻‍⚖️" , UVM_FULL)
+fork
+`uvm_do_on(wb_spi1_flag, p_sequencer.wb_seqr)
+`uvm_do_on(spi_seq, p_sequencer.spi1_seqr)
+join
+
+endtask:body
+
+
+endclass: flag_seq
 
 class stress_seq extends mc_seq;
     

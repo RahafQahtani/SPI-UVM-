@@ -52,7 +52,7 @@ spi_transaction req;
         start_item(req);
 
         //random response data
-       req.data_out = 8'b10101010;  
+       req.data_out = req.data_in;  
 
         finish_item(req);
 `uvm_info(get_type_name(), $sformatf("Slave recevied data: %h", req.data_in), UVM_MEDIUM)

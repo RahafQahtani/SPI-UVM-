@@ -32,7 +32,7 @@ class scoreboard extends uvm_scoreboard;
   // SPI 1 callback
   function void write_spi1(spi_transaction t);
     `uvm_info("SCOREBOARD", $sformatf("Received SPI1 Transaction: %s", t.sprint()), UVM_MEDIUM)
-    ref_model.tx_queue.push_back(t.data_in);
+    // ref_model.tx_queue.push_back(t.data_in);
     ref_model.rx_queue.push_back(t.data_out);
     ref_model.spi_queue.push_back(t);
     total_spi_transactions++;
@@ -43,7 +43,7 @@ class scoreboard extends uvm_scoreboard;
   // SPI 2 callback
   function void write_spi2(spi_transaction t);
     `uvm_info("SCOREBOARD", $sformatf("Received SPI2 Transaction: %s", t.sprint()), UVM_MEDIUM)
-    ref_model.tx_queue.push_back(t.data_in);
+    // ref_model.tx_queue.push_back(t.data_in);
     ref_model.rx_queue.push_back(t.data_out);
     ref_model.spi_queue.push_back(t);
     total_spi_transactions++;
@@ -54,87 +54,16 @@ class scoreboard extends uvm_scoreboard;
   // Reference Model callback
   function void write_ref(wb_transaction t);
     `uvm_info("SCOREBOARD", $sformatf("Received REF Transaction: %s", t.sprint()), UVM_MEDIUM)
+     if(t.addr ==2) begin
     ref_model.tx_queue.push_back(t.din);
     ref_model.rx_queue.push_back(t.dout);
+     end
     ref_model.wb_queue.push_back(t);
     total_ref_transactions++;
     total_packets_received++;
     compare_transactions();
   endfunction
 
-  // Compare logic
-//  function void compare_transactions();
-//    if (ref_model.wb_queue.size() > 0 ) begin
-//   if (ref_model.rx_queue.size() > 0 && ref_model.tx_queue.size() > 0) begin
-//      wb_transaction ref_pkt = ref_model.wb_queue.pop_front();
-//     spi_transaction spi_pkt = ref_model.spi_queue.pop_front();
-//     bit [7:0] ref_data_out = ref_model.rx_queue.pop_front();
-//     bit [7:0] ref_din       = ref_model.tx_queue.pop_front();
-     
-//     if (ref_pkt.op_type == wb_read) begin
-//     case (ref_pkt.addr)
-//       32'h2: begin  // SPDR
-//       if (ref_data_out == ref_din) begin
-//         total_matched_packets++;
-//         `uvm_info("SCOREBOARD", $sformatf("RX MATCH: SPI data_out = %h, WB din = %h", ref_data_out, ref_din), UVM_HIGH)
-//       end else begin
-//         total_wrong_packets++;
-//         `uvm_error("SCOREBOARD", $sformatf("RX MISMATCH: SPI data_out = %h, WB din = %h", ref_data_out, ref_din))
-//       end
-//       end
-      
-
-//       32'h0: begin  // SPCR
-//         if (ref_data_out == ref_model.get_SPCR()) begin
-//           total_matched_packets++;
-//         end else begin
-//           total_wrong_packets++;
-//           `uvm_error("SCOREBOARD", $sformatf("MISMATCH: REF WB = %h, REF MODEL SPCR = %h", ref_data_out, ref_model.get_SPCR()))
-//         end
-//       end
-
-//       32'h1: begin  // SPSR
-//         if (ref_data_out == ref_model.get_SPSR()) begin
-//           total_matched_packets++;
-//         end else begin
-//           total_wrong_packets++;
-//           `uvm_error("SCOREBOARD", $sformatf("MISMATCH: REF WB = %h, REF MODEL SPSR = %h", ref_data_out, ref_model.get_SPSR()))
-//         end
-//       end
-
-//       32'h3: begin  // SPER
-//         if (ref_data_out == ref_model.get_SPER()) begin
-//           total_matched_packets++;
-//         end else begin
-//           total_wrong_packets++;
-//           `uvm_error("SCOREBOARD", $sformatf("MISMATCH: REF WB = %h, REF MODEL SPER = %h", ref_data_out, ref_model.get_SPER()))
-//         end
-//       end
-
-//       32'h4: begin  // CSREG
-//         if (ref_data_out == ref_model.get_CSREG()) begin
-//           total_matched_packets++;
-//         end else begin
-//           total_wrong_packets++;
-//           `uvm_error("SCOREBOARD", $sformatf("MISMATCH: REF WB = %h, REF MODEL CSREG = %h", ref_data_out, ref_model.get_CSREG()))
-//         end
-//       end
-
-//       default: begin
-//         `uvm_warning("SCOREBOARD", $sformatf("Unhandled address in comparison: 0x%0h", ref_pkt.addr))
-//       end
-//     endcase
-
-//     end 
-
-//    end
-//   else if (ref_model.rx_queue.size() == 0 || ref_model.tx_queue.size() == 0) begin
-//   return;
-  
-
-//   end
-//    end 
-// endfunction
 
 function void compare_transactions();
   if (ref_model.wb_queue.size() == 0)
@@ -148,23 +77,21 @@ function void compare_transactions();
       32'h0: compare_reg("SPCR", ref_pkt.dout, ref_model.get_SPCR());
       32'h1: compare_reg("SPSR", ref_pkt.dout, ref_model.get_SPSR());
        32'h2: begin // SPDR
-       if (ref_model.spi_queue.size() > 0 &&
-      ref_model.rx_queue.size() > 0 &&
-      ref_model.tx_queue.size() > 0) begin
-       
-      spi_transaction spi_pkt = ref_model.spi_queue.pop_front();
-      bit [7:0] ref_data_out = ref_model.rx_queue.pop_front();
-      bit [7:0] ref_din = ref_model.tx_queue.pop_front();
-
-      if (ref_data_out == ref_din) begin
-        total_matched_packets++;
-        `uvm_info("SCOREBOARD", $sformatf("RX MATCH: SPI data_out = %h, WB din = %h", ref_data_out, ref_din), UVM_HIGH)
-      end else begin
-        total_wrong_packets++;
-        `uvm_error("SCOREBOARD", $sformatf("RX MISMATCH: SPI data_out = %h, WB din = %h", ref_data_out, ref_din))
-      end
-    end
-       end 
+            if (ref_model.spi_queue.size() > 0 &&
+            ref_model.rx_queue.size() > 0 &&
+            ref_model.tx_queue.size() > 0) begin
+            bit [7:0] expected_data = ref_model.rx_queue.pop_front();
+            bit [7:0] actual_data   = ref_model.tx_queue.pop_front();
+            spi_transaction spi_pkt = ref_model.spi_queue.pop_front();
+            if (spi_pkt.data_out == ref_model.get_SPDR()) begin
+              total_matched_packets++;
+              `uvm_info("SCOREBOARD", $sformatf("MATCH: WB read = %h, expected SPI = %h",  ref_model.get_SPDR(),spi_pkt.data_out), UVM_HIGH)
+            end else begin
+              total_wrong_packets++;
+              `uvm_error("SCOREBOARD", $sformatf("MISMATCH: WB read = %h, expected SPI = %h", ref_model.get_SPDR(), spi_pkt.data_out))
+            end
+            end
+            end 
       32'h3: compare_reg("SPER", ref_pkt.dout, ref_model.get_SPER());
       32'h4: compare_reg("CSREG", ref_pkt.dout, ref_model.get_CSREG());
      default: begin 
@@ -173,11 +100,14 @@ function void compare_transactions();
     endcase
    
   end 
+  
   end 
 endfunction
 
 
 function void compare_reg(string name, bit [7:0] actual, bit [7:0] expected);
+    void'(ref_model.rx_queue.pop_front());
+      void'(ref_model.tx_queue.pop_front());
   if (actual == expected) begin
     total_matched_packets++;
     `uvm_info("SCOREBOARD", $sformatf("MATCH: WB = %h, REF_MODEL %s = %h", actual, name, expected), UVM_HIGH)
@@ -196,8 +126,6 @@ endfunction
     `uvm_info("SCOREBOARD", $sformatf("Total Received Packets  : %0d", total_packets_received), UVM_LOW)
     `uvm_info("SCOREBOARD", $sformatf("Total Matched Packets   : %0d", total_matched_packets), UVM_LOW)
     `uvm_info("SCOREBOARD", $sformatf("Total Wrong Packets     : %0d", total_wrong_packets), UVM_LOW)
-    // `uvm_info("SCOREBOARD", $sformatf("Remaining RX Queue      : %0d", ref_model.rx_queue.size()), UVM_LOW)
-    // `uvm_info("SCOREBOARD", $sformatf("Remaining TX Queue      : %0d", ref_model.tx_queue.size()), UVM_LOW)
   endfunction
 
 endclass
